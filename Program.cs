@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Services;
 using ASP_deneme.Services;
 using Microsoft.AspNetCore.RateLimiting;
+using StackExchange.Redis;
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -62,6 +63,10 @@ builder.Services.AddStackExchangeRedisCache(options =>
     options.Configuration = "localhost:6379";
     options.InstanceName = "MyApp_";
 });
+
+//StackExchange.Redis
+builder.Services.AddSingleton<IConnectionMultiplexer>(sp => 
+        ConnectionMultiplexer.Connect("localhost:6379"));
 
 
 builder.Services.AddControllers();

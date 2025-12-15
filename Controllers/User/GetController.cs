@@ -23,8 +23,8 @@ public class GetController : ControllerBase
     }
 
     [HttpGet("employees")]
-    //[EnableRateLimiting("fixed")]
-    //[Authorize]
+    [EnableRateLimiting("fixed")]
+    [Authorize]
     public async Task<IActionResult> GetEmployee()
     {
         try

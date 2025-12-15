@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
+using StackExchange.Redis;
 
 namespace ASP_deneme.Services;
 
@@ -13,16 +14,20 @@ public interface IRedisCacheService
 
 public class RedisCacheService : IRedisCacheService
 {
+    // Microfost basic redis
     private readonly IDistributedCache _cache;
+    // Real complex redis
+    private readonly IConnectionMultiplexer _redisConnection;
     private readonly ILogger<RedisCacheService> _logger;
     private static readonly JsonSerializerOptions _jsonOptions = new()
     {
         PropertyNameCaseInsensitive = true
     };
 
-    public RedisCacheService(IDistributedCache cache, ILogger<RedisCacheService> logger)
+    public RedisCacheService(IDistributedCache cache, IConnectionMultiplexer redisConnection,ILogger<RedisCacheService> logger)
     {
         _cache = cache;
+        _redisConnection = redisConnection;
         _logger = logger;
     }
 
@@ -78,16 +83,22 @@ public class RedisCacheService : IRedisCacheService
         }
     }
 
-    //şuanda kullanılamıyor , StackExchage kullanılırsa revize edilerek kullanılabilir
     public async Task RemoveByPatternAsync(string pattern)
     {
         try
         {
-            // Redis pattern-based deletion için
-            // Not: IDistributedCache pattern-based deletion'ı doğrudan desteklemiyor
-            // Bu yüzden key convention kullanarak silme yapıyoruz
-            await _cache.RemoveAsync(pattern);
-            _logger.LogInformation("Cache removed for pattern: {Pattern}", pattern);
+            var server = _redisConnection.GetServer(_redisConnection.GetEndPoints().First());
+
+            var db = _redisConnection.GetDatabase();
+
+            var keys = server.Keys(database: db.Database, pattern: pattern);
+
+            foreach (var key in keys)
+            {
+                await db.KeyDeleteAsync(key);
+            }
+
+            _logger.LogInformation("Cacde removed from pattern {Pattern}", pattern);
         }
         catch (Exception ex)
         {
