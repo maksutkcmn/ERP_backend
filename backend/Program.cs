@@ -80,15 +80,16 @@ builder.Services.AddRateLimiter(options =>
 });
 
 //Redis Cache
+var redisConnection = builder.Configuration["Redis:Connection"] ?? "localhost:6379";
 builder.Services.AddStackExchangeRedisCache(options =>
 {
-    options.Configuration = "localhost:6379";
+    options.Configuration = redisConnection;
     options.InstanceName = "MyApp_";
 });
 
 //StackExchange.Redis
-builder.Services.AddSingleton<IConnectionMultiplexer>(sp => 
-        ConnectionMultiplexer.Connect("localhost:6379"));
+builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+        ConnectionMultiplexer.Connect(redisConnection));
 
 
 // CORS 

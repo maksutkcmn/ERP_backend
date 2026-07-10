@@ -7,6 +7,7 @@ import { apiFetch } from "@/src/lib/api";
 
 export default function RegisterPage() {
   const [name, setName] = useState("");
+  const [surname, setSurname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -26,7 +27,7 @@ export default function RegisterPage() {
     try {
       await apiFetch("register", {
         method: "POST",
-        body: JSON.stringify({ name, email, password })
+        body: JSON.stringify({ name, surname, email, password })
       });
       router.push("/login");
     } catch (err: any) {
@@ -47,6 +48,7 @@ export default function RegisterPage() {
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <Input label="İsim" value={name} onChange={setName} />
+            <Input label="Soyisim" value={surname} onChange={setSurname} />
             <Input label="Email" value={email} onChange={setEmail} />
             <Input label="Şifre" type="password" value={password} onChange={setPassword} />
             <Input label="Şifre Tekrar" type="password" value={confirmPassword} onChange={setConfirmPassword} />
