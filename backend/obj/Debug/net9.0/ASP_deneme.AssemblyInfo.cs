@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ASP_deneme")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+eafb2eba1ae33e2648dec47ab9cf7e81386c451d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+995041e4b395e9d6c0866c661d808c4d7002afa7")]
 [assembly: System.Reflection.AssemblyProductAttribute("ASP_deneme")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ASP_deneme")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
